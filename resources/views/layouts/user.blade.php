@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{ asset ('assets') }}/css/style.css">
     <link rel="manifest" href="__manifest.json">
     @yield('css')
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
 <body style="background-color:#e9ecef;">
@@ -44,7 +45,7 @@
     <script src="{{ asset ('assets') }}/js/lib/popper.min.js"></script>
     <script src="{{ asset ('assets') }}/js/lib/bootstrap.min.js"></script>
     <!-- Ionicons -->
-    <script type="module" src="https:/unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
+    <script src="https:/unpkg.com/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
     <!-- Owl Carousel -->
     <script src="{{ asset ('assets') }}/js/plugins/owl-carousel/owl.carousel.min.js"></script>
     <!-- jQuery Circle Progress -->
