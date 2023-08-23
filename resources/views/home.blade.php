@@ -213,11 +213,11 @@
                             <div class="item">
                                 @if ($history->type == 'deposit')
                                 <div class="icon-box bg-primary">
-                                    <ion-icon name="arrow-down"></ion-icon>
+                                <i class="fas fa-arrow-down"></i>
                                 </div>
                                 @else
                                 <div class="icon-box bg-danger">
-                                    <ion-icon name="arrow-up"></ion-icon>
+                                <i class="fas fa-arrow-up"></i>
                                 </div>
                                 @endif
                                 <div class="in">
