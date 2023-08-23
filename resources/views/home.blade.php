@@ -28,7 +28,7 @@
                     <div class="item-menu text-center">
                         <div class="menu-icon">
                             <a href="{{ route('user.bayar.index') }}" class="green" style="font-size: 40px;">
-                                <ion-icon name="scan-outline"></ion-icon>
+                            <i class="fas fa-qrcode"></i>
                             </a>
                         </div>
                         <div class="menu-name">
@@ -38,7 +38,7 @@
                     <div class="item-menu text-center">
                         <div class="menu-icon">
                             <a href="{{ route('user.topup.index') }}" class="danger" style="font-size: 40px;">
-                                <ion-icon name="duplicate-outline"></ion-icon>
+                            <i class="far fa-plus-square"></i>
                             </a>
                         </div>
                         <div class="menu-name">
@@ -48,7 +48,7 @@
                     <div class="item-menu text-center">
                         <div class="menu-icon">
                             <a href="{{ route('user.transfer.index') }}" class="warning" style="font-size: 40px;">
-                                <ion-icon name="bluetooth-outline"></ion-icon>
+                            <i class="far fa-plus-square"></i>
                             </a>
                         </div>
                         <div class="menu-name">
@@ -58,7 +58,7 @@
                     <div class="item-menu text-center">
                         <div class="menu-icon">
                             <a href="{{ route('user.riwayat-transaksi.index') }}" class="orange" style="font-size: 40px;">
-                                <ion-icon name="document-attach-outline"></ion-icon>
+                            <i class="fas fa-history"></i>
                             </a>
                         </div>
                         <div class="menu-name">
