@@ -8,7 +8,7 @@
 <div class="appHeader bg-primary text-light">
     <div class="left">
         <a href="javascript:;" class="headerButton goBack">
-            <ion-icon name="chevron-back-outline"></ion-icon>
+           <i class="fas fa-arrow-left"></i>
         </a>
     </div>
     <div class="pageTitle">Transfer</div>
