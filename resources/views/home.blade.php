@@ -28,7 +28,7 @@
                     <div class="item-menu text-center">
                         <div class="menu-icon">
                             <a href="{{ route('user.bayar.index') }}" class="green" style="font-size: 40px;">
-                            <i class="fas fa-qrcode"></i>
+                                <i class="fas fa-qrcode"></i>
                             </a>
                         </div>
                         <div class="menu-name">
@@ -38,7 +38,7 @@
                     <div class="item-menu text-center">
                         <div class="menu-icon">
                             <a href="{{ route('user.topup.index') }}" class="danger" style="font-size: 40px;">
-                            <i class="far fa-plus-square"></i>
+                                <i class="far fa-plus-square"></i>
                             </a>
                         </div>
                         <div class="menu-name">
@@ -48,7 +48,7 @@
                     <div class="item-menu text-center">
                         <div class="menu-icon">
                             <a href="{{ route('user.transfer.index') }}" class="warning" style="font-size: 40px;">
-                            <i class="far fa-plus-square"></i>
+                                <i class="far fa-plus-square"></i>
                             </a>
                         </div>
                         <div class="menu-name">
@@ -58,7 +58,7 @@
                     <div class="item-menu text-center">
                         <div class="menu-icon">
                             <a href="{{ route('user.riwayat-transaksi.index') }}" class="orange" style="font-size: 40px;">
-                            <i class="fas fa-history"></i>
+                                <i class="fas fa-history"></i>
                             </a>
                         </div>
                         <div class="menu-name">
@@ -82,7 +82,7 @@
                                 <div class="item-menu text-center">
                                     <div class="menu-icon">
                                         <a href="{{ route('user.sim-wajib.index') }}" class="green" style="font-size: 40px;">
-                                            <ion-icon name="bookmark-outline"></ion-icon>
+                                            <i class="fas fa-wallet"></i>
                                         </a>
                                     </div>
                                     <div class="menu-name">
@@ -92,7 +92,7 @@
                                 <div class="item-menu text-center">
                                     <div class="menu-icon">
                                         <a href="{{ route('user.sim-sukarela.index') }}" class="danger" style="font-size: 40px;">
-                                            <ion-icon name="wallet-outline"></ion-icon>
+                                            <i class="fas fa-coins"></i>
                                         </a>
                                     </div>
                                     <div class="menu-name">
@@ -102,7 +102,7 @@
                                 <div class="item-menu text-center">
                                     <div class="menu-icon">
                                         <a href="" class="green" style="font-size: 40px;">
-                                            <ion-icon name="save-outline"></ion-icon>
+                                            <i class="fas fa-money-check"></i>
                                         </a>
                                     </div>
                                     <div class="menu-name">
@@ -115,7 +115,7 @@
                                 <div class="item-menu text-center">
                                     <div class="menu-icon">
                                         <a href="" class="danger" style="font-size: 40px;">
-                                            <ion-icon name="card-outline"></ion-icon>
+                                            <i class="fas fa-credit-card"></i>
                                         </a>
                                     </div>
                                     <div class="menu-name">
@@ -125,7 +125,7 @@
                                 <div class="item-menu text-center">
                                     <div class="menu-icon">
                                         <a href="" class="warning" style="font-size: 40px;">
-                                            <ion-icon name="cash-outline"></ion-icon>
+                                            <i class="fas fa-hands-helping"></i>
                                         </a>
                                     </div>
                                     <div class="menu-name">
@@ -135,7 +135,7 @@
                                 <div class="item-menu text-center">
                                     <div class="menu-icon">
                                         <a href="" class="warning" style="font-size: 40px;">
-                                            <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+                                            <i class="fas fa-grip-horizontal"></i>
                                         </a>
                                     </div>
                                     <div class="menu-name">
