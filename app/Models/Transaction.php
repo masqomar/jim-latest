@@ -9,8 +9,10 @@ class Transaction extends Model
 {
     use HasFactory;
 
+    protected $table = 'transactions';
+
     public function user()
     {
-        return $this->belongsTo(User::class, 'payable_id', 'id');
+        return $this->belongsTo(User::class, 'payable_id');
     }
 }
