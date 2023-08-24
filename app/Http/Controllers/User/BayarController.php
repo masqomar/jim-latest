@@ -48,19 +48,25 @@ class BayarController extends Controller
         $saldoPenerima = $penerima->balanceInt;
 
         if ($nominalBayar < $saldoPengirim) {
-            $transfer = $pengirim->transfer($penerima, $nominalBayar, new Extra(
-                deposit: ['description' => 'Pembayaran dari anggota ' . Auth::user()->member_id],
-                withdraw: new Option(meta: ['description' => 'Pembelian ke ' . $request->member_id], confirmed: true)
-            ));
+            $pengirim->withdraw($nominalBayar, ['description' => 'Pembelian ke ' . $request->member_id]);
+            $pengirim->balance;
 
-            $transfer->withdraw->meta;
-            $transfer->withdraw->confirmed;
-
-            $transfer->deposit->meta;
-            $transfer->deposit->confirmed;
-
-            $pengirim->balanceInt;
+            $penerima->deposit($nominalBayar, ['description' => 'Pembayaran dari anggota ' . Auth::user()->member_id]);
             $penerima->balanceInt;
+
+            // $transfer = $pengirim->transfer($penerima, $nominalBayar, new Extra(
+            //     deposit: ['description' => 'Pembayaran dari anggota ' . Auth::user()->member_id],
+            //     withdraw: new Option(meta: ['description' => 'Pembelian ke ' . $request->member_id], confirmed: true)
+            // ));
+
+            // $transfer->withdraw->meta;
+            // $transfer->withdraw->confirmed;
+
+            // $transfer->deposit->meta;
+            // $transfer->deposit->confirmed;
+
+            // $pengirim->balanceInt;
+            // $penerima->balanceInt;
 
             return redirect()->route('user.bayar.sukses')
                 ->with('success', 'Pembayaran Ke   ' . $namaPenerima . '  sebesar   Rp. ' . number_format($nominalBayar) . '  berhasil');
