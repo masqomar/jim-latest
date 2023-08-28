@@ -26,6 +26,16 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
+                    <div class="col-md-12">
+                            <form action="{{route('user-saving-reports.cetak_pdf')}}" method="get" target="_blank">
+                                <div class="row">
+                                    
+                                    <div class="col-md-2 form-group" style="margin-top:25px;">
+                                        <input type="submit" class="btn btn-primary" value="Cetak">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         <div class="table-responsive p-1">
                             <table class="table" width="100%">
                                 <tr>

@@ -48,9 +48,11 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::resource('jimpay-vouchers', App\Http\Controllers\Admin\JimpayVoucherController::class);  // Data Voucher JIMPay
     
     // Laporan - laporan
-    Route::resource('user-saving-reports', App\Http\Controllers\Admin\UserSavingReportController::class);
+    Route::get('user-saving-reports', [App\Http\Controllers\Admin\UserSavingReportController::class, 'index'])->name('user-saving-reports.index');
+    Route::get('user-saving-reports/cetak_pdf', [App\Http\Controllers\Admin\UserSavingReportController::class, 'cetak_pdf'])->name('user-saving-reports.cetak_pdf');
     Route::get('balance-sheet-reports', [App\Http\Controllers\Admin\BalanceSheetReportController::class, 'index']);
     Route::get('balance-sheet-reports/filter', [App\Http\Controllers\Admin\BalanceSheetReportController::class, 'filter'])->name('balance-sheet-reports.filter');
+    Route::get('balance-sheet-reports/cetak_pdf', [App\Http\Controllers\Admin\BalanceSheetReportController::class, 'cetak_pdf'])->name('balance-sheet-reports.cetak_pdf');
     Route::get('income-statement-reports', [App\Http\Controllers\Admin\IncomeStatementReportController::class, 'index']);
     Route::get('income-statement-reports/filter', [App\Http\Controllers\Admin\IncomeStatementReportController::class, 'filter'])->name('income-statement-reports.filter');
     Route::get('devidens', [App\Http\Controllers\Admin\DevidenController::class, 'index'])->name('devidens.index');
