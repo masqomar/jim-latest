@@ -3,10 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\JimpayVoucherRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Loan;
+use App\Models\LoanDetail;
+use App\Models\SavingTransaction;
+use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserTopup;
+use Bavix\Wallet\Models\Wallet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 use Image;
 
@@ -117,8 +125,74 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user->load('roles:id,name');
-        
-        return view('users.show', compact('user'));
+
+        $setoranSimpanan = SavingTransaction::with('saving_type')->where('akun', 'Setoran')->where('anggota_id', $user->id)->get();
+        $totalSetoran = SavingTransaction::with('saving_type')->where('akun', 'Setoran')->where('anggota_id', $user->id)->sum('jumlah');
+        $setoranPenarikan = SavingTransaction::with('saving_type')->where('akun', 'Penarikan')->where('anggota_id', $user->id)->get();
+        $totalPenarikan = SavingTransaction::with('saving_type')->where('akun', 'Penarikan')->where('anggota_id', $user->id)->sum('jumlah');
+        $saldoSimpanan = $totalSetoran - $totalPenarikan;
+
+        $topups = Transaction::where('payable_id', $user->id)->where('type', 'deposit')->get();
+        $transaksiJimpay = Transaction::where('payable_id', $user->id)->where('type', 'withdraw')->get();
+        $saldoJimpay = $user->balance;
+
+        foreach ($setoranSimpanan as $setoran) {
+            $dataSetoran[] = [
+                'TRD' . str_pad($setoran->id, 5, '0', STR_PAD_LEFT),
+                $setoran->tgl_transaksi->format('j F Y'),
+                $setoran->saving_type->jns_simpan,
+                number_format($setoran->jumlah),
+                $setoran->keterangan ?? '-',
+            ];
+        }
+        foreach ($setoranPenarikan as $penarikan) {
+            $dataPenarikan[] = [
+                'TRK' . str_pad($penarikan->id, 5, '0', STR_PAD_LEFT),
+                $penarikan->tgl_transaksi->format('j F Y'),
+                $penarikan->saving_type->jns_simpan,
+                number_format($penarikan->jumlah),
+                $penarikan->keterangan ?? '-',
+            ];
+        }
+        foreach ($topups as $topup) {
+            $dataTopup[] = [
+                'TJD' . str_pad($topup->id, 5, '0', STR_PAD_LEFT),
+                $topup->created_at->format('j F Y'),
+                number_format($topup->amount),
+                $topup->meta ?? '-',
+            ];
+        }
+        foreach ($transaksiJimpay as $transaksi) {
+            $dataTransaksi[] = [
+                'TJK' . str_pad($transaksi->id, 5, '0', STR_PAD_LEFT),
+                $transaksi->created_at->format('j F Y'),
+                number_format(abs($transaksi->amount)),
+                $transaksi->meta ?? '-',
+            ];
+        }
+        $configSetoran = [
+            'data' => $dataSetoran,
+            'order' => [[0, 'desc']],
+            'columns' => [null, null, null, null, null]
+        ];
+        $configPenarikan = [
+            'data' => $dataPenarikan,
+            'order' => [[0, 'desc']],
+            'columns' => [null, null, null, null, null]
+        ];
+        $configTopup = [
+            'data' => $dataTopup,
+            'order' => [[0, 'desc']],
+            'columns' => [null, null, null, null]
+        ];
+        $configTransaksi = [
+            'data' => $dataTransaksi,
+            'order' => [[0, 'desc']],
+            'columns' => [null, null, null, null]
+        ];
+
+        // return json_encode($marginPembiayaan);
+        return view('users.show', compact('user', 'configSetoran', 'configPenarikan', 'configTopup', 'configTransaksi', 'totalSetoran', 'totalPenarikan', 'saldoSimpanan', 'saldoJimpay'));
     }
 
     /**
@@ -207,5 +281,25 @@ class UserController extends Controller
             ->route('users.index')
             ->with('success', __('Anggota berhasil dihapus.'));
     }
-}
 
+    public function storeTopup(JimpayVoucherRequest $request)
+    {
+        $request->validated();
+        DB::transaction(function () use ($request) {
+            UserTopup::create([
+                'user_id' => $request->user_id,
+                'amount'    => $request->amount,
+                'date'      => now(),
+                'note' => $request->note,
+                'status' => 'Sukses',
+            ]);
+
+            $user = User::where('id', $request->user_id)->first();
+            $user->deposit($request->amount, ['description' => $request->note]);
+        });
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', __('Topup berhasil disimpan'));
+    }
+}

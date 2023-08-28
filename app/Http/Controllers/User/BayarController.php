@@ -46,7 +46,7 @@ class BayarController extends Controller
         $saldoPenerima = $penerima->balanceInt;
 
         if ($nominalBayar < $saldoPengirim) {
-            $pengirim->withdraw($nominalBayar, ['description' => 'Pembelian ke ' . $request->member_id]);
+            $pengirim->withdraw($nominalBayar, ['description' => 'Pembelian ke ' . $namaPenerima]);
             $pengirim->balance;
 
             $penerima->deposit($nominalBayar, ['description' => 'Pembayaran dari anggota ' . Auth::user()->member_id]);
