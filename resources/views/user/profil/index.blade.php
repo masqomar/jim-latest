@@ -21,22 +21,34 @@
 <br>
 <ul class="listview image-listview">
     <li>
-        <a href="{{ route('user.profil.detail') }}" style="color: #0a0a0a">
+        <a href="{{ route('user.profil.detail') }}" style="color: #0a0a0a; text-decoration:none">
             <div class="item">
                 <div class="icon-box bg-info">
-                    <ion-icon name="person"></ion-icon>
+                    <i class="fas fa-user-edit"></i>
                 </div>
                 <div class="in">
-                    <div>Edit Profil</div>
+                    <div>Update Profil</div>
                 </div>
             </div>
         </a>
     </li>
     <li>
-        <a style="color: #0a0a0a" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+        <a href="{{ route('user.profil.update-password') }}" style="color: #0a0a0a; text-decoration:none">
+            <div class="item">
+                <div class="icon-box bg-primary">
+                    <i class="fas fa-key"></i>
+                </div>
+                <div class="in">
+                    <div>Update Password</div>
+                </div>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a style="color: #0a0a0a; text-decoration:none" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
             <div class="item">
                 <div class="icon-box bg-success">
-                    <ion-icon name="log-out"></ion-icon>
+                    <i class="fas fa-sign-out-alt"></i>
                 </div>
                 <div class="in">
                     <div>Logout</div>

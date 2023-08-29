@@ -49,17 +49,15 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::resource('jimpay-vouchers', App\Http\Controllers\Admin\JimpayVoucherController::class);  // Data Voucher JIMPay
     
     // Laporan - laporan
-    Route::get('user-saving-reports', [App\Http\Controllers\Admin\UserSavingReportController::class, 'index'])->name('user-saving-reports.index');
-    Route::get('user-saving-reports/cetak_pdf', [App\Http\Controllers\Admin\UserSavingReportController::class, 'cetak_pdf'])->name('user-saving-reports.cetak_pdf');
+    Route::get('user-transactions', [App\Http\Controllers\Admin\UserTransactionController::class, 'index'])->name('user-transactions.index');
+    Route::get('user-transactions/cetak_pdf', [App\Http\Controllers\Admin\UserTransactionController::class, 'cetak_pdf'])->name('user-transactions.cetak_pdf');
+    Route::get('user-saving-transactions', [App\Http\Controllers\Admin\UserSavingTransactionController::class, 'index'])->name('user-saving-transactions.index');
+    Route::get('jimpay-transactions', [App\Http\Controllers\Admin\JimpayTransactionController::class, 'index'])->name('jimpay-transactions.index');
     Route::get('balance-sheet-reports', [App\Http\Controllers\Admin\BalanceSheetReportController::class, 'index']);
     Route::get('balance-sheet-reports/filter', [App\Http\Controllers\Admin\BalanceSheetReportController::class, 'filter'])->name('balance-sheet-reports.filter');
     Route::get('balance-sheet-reports/cetak_pdf', [App\Http\Controllers\Admin\BalanceSheetReportController::class, 'cetak_pdf'])->name('balance-sheet-reports.cetak_pdf');
     Route::get('income-statement-reports', [App\Http\Controllers\Admin\IncomeStatementReportController::class, 'index']);
     Route::get('income-statement-reports/filter', [App\Http\Controllers\Admin\IncomeStatementReportController::class, 'filter'])->name('income-statement-reports.filter');
-    Route::get('devidens', [App\Http\Controllers\Admin\DevidenController::class, 'index'])->name('devidens.index');
-    Route::get('devidens', [App\Http\Controllers\Admin\DevidenController::class, 'filter'])->name('devidens.filter');
-    Route::get('participations', [App\Http\Controllers\Admin\UserParticipationController::class, 'index'])->name('participations.index');
-    Route::get('participations', [App\Http\Controllers\Admin\UserParticipationController::class, 'filter'])->name('participations.filter');
     Route::resource('deviden-reports', App\Http\Controllers\Admin\DevidenReportController::class);
     Route::resource('cash-transaction-reports', App\Http\Controllers\Admin\CashTransactionReportController::class);
     Route::resource('saving-cash-reports', App\Http\Controllers\Admin\SavingCashReportController::class);
@@ -123,10 +121,17 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
     Route::get('simpanan-sukarela/pencairan', [SimSukarelaController::class, 'tarik'])->name('user.sim-sukarela.tarik');
     // Route::post('simpanan-sukarela/pencairan', [App\Http\Controllers\User\SimSukarelaController::class, 'tarikStore'])->name('user.sim-sukarela.tarikStore');
 
+     // Pembiayaan
+     Route::get('pembiayaan', [\App\Http\Controllers\User\PembiayaanController::class, 'index'])->name('user.pembiayaan.index');
+     Route::get('pembiayaan/{id}/show', [\App\Http\Controllers\User\PembiayaanController::class, 'show'])->name('user.pembiayaan.show');
+
     // Riwayat Transaksi
     Route::get('riwayat-transaksi', [App\Http\Controllers\User\RiwayatTransaksiController::class, 'index'])->name('user.riwayat-transaksi.index');
 
     // Profil
     Route::get('profil', [App\Http\Controllers\User\ProfilController::class, 'index'])->name('user.profil.index');
     Route::get('edit-profil', [App\Http\Controllers\User\ProfilController::class, 'editProfil'])->name('user.profil.detail');
+    Route::put('edit-profil/update', [App\Http\Controllers\User\ProfilController::class, 'update'])->name('user.profil.update');
+    Route::get('update-password', [App\Http\Controllers\User\ProfilController::class, 'updatePassword'])->name('user.profil.update-password');
+    Route::post('update-password', [App\Http\Controllers\User\ProfilController::class, 'changePasswordSave'])->name('user.profil.changePasswordSave');
 });

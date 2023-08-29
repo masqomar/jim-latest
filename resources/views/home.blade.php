@@ -124,7 +124,7 @@
                                 </div>
                                 <div class="item-menu text-center">
                                     <div class="menu-icon">
-                                        <a href="" class="warning" style="font-size: 40px;">
+                                        <a href="{{route('user.pembiayaan.index')}}" class="warning" style="font-size: 40px;">
                                             <i class="fas fa-hands-helping"></i>
                                         </a>
                                     </div>

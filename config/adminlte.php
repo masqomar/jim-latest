@@ -382,7 +382,7 @@ return [
         ],
         [
             'text'    => 'Laporan',
-            'icon'    => 'fas fa-wallet',
+            'icon'    => 'fas fa-clipboard-list',
             'submenu' => [
                 [
                     'text' => 'Kas Anggota',
@@ -410,8 +410,13 @@ return [
                     'icon_color' => 'yellow',
                 ],
                 [
-                    'text' => 'SHU',
-                    'url'  => 'devidens',
+                    'text' => 'Transaksi Simpanan',
+                    'url'  => 'user-saving-transactions',
+                    'icon_color' => 'yellow',
+                ],
+                [
+                    'text' => 'Transaksi Jimpay',
+                    'url'  => 'jimpay-transactions',
                     'icon_color' => 'yellow',
                 ],
                 [
@@ -423,7 +428,7 @@ return [
         ],
         [
             'text'    => 'Master Data',
-            'icon'    => 'fas fa-wallet',
+            'icon'    => 'fas fa-database',
             'submenu' => [
                 [
                     'text' => 'Jenis Simpanan',
@@ -467,7 +472,7 @@ return [
         ['header' => 'MENU JIMMART'],
         [
             'text'    => 'Topup JIMPay',
-            'icon'    => 'fas fa-download',
+            'icon'    => 'fas fa-cart-plus',
             'submenu' => [
                 [
                     'text' => 'Voucher Bulanan',
@@ -485,7 +490,7 @@ return [
         ],
         [
             'text'    => ' Mitra JIMMart',
-            'icon'    => 'fas fa-download',
+            'icon'    => 'fas fa-store',
             'submenu' => [
                 [
                     'text' => 'Data Mitra',
@@ -505,7 +510,7 @@ return [
         ['header' => 'MENU LAIN - LAIN'],
         [
             'text'    => 'Data Log',
-            'icon'    => 'fas fa-download',
+            'icon'    => 'fas fa-bug',
             'submenu' => [
                 [
                     'text' => 'Log Aktifitas',
@@ -521,7 +526,7 @@ return [
         ],
         [
             'text'    => 'Role Permission',
-            'icon'    => 'fas fa-download',
+            'icon'    => 'fas fa-key',
             'submenu' => [
                 [
                     'text' => 'Permission',
@@ -701,6 +706,26 @@ return [
                     'type' => 'css',
                     'asset' => true,
                     'location' => 'vendor/daterangepicker/daterangepicker.css',
+                ],
+            ],
+        ],
+        'TempusDominusBs4' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/moment/moment.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css',
                 ],
             ],
         ],
