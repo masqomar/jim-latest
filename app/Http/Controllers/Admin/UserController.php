@@ -171,22 +171,22 @@ class UserController extends Controller
             ];
         }
         $configSetoran = [
-            'data' => $dataSetoran,
+            'data' => $dataSetoran ?? [null, null,null, null],
             'order' => [[0, 'desc']],
             'columns' => [null, null, null, null, null]
         ];
         $configPenarikan = [
-            'data' => $dataPenarikan,
+            'data' => $dataPenarikan ?? [null, null,null, null],
             'order' => [[0, 'desc']],
             'columns' => [null, null, null, null, null]
         ];
         $configTopup = [
-            'data' => $dataTopup,
+            'data' => $dataTopup ?? [null, null,null, null],
             'order' => [[0, 'desc']],
             'columns' => [null, null, null, null]
         ];
         $configTransaksi = [
-            'data' => $dataTransaksi,
+            'data' => $dataTransaksi ?? [null, null,null, null],
             'order' => [[0, 'desc']],
             'columns' => [null, null, null, null]
         ];
