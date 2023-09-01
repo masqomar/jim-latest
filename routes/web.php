@@ -61,6 +61,8 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::resource('deviden-reports', App\Http\Controllers\Admin\DevidenReportController::class);
     Route::resource('cash-transaction-reports', App\Http\Controllers\Admin\CashTransactionReportController::class);
     Route::resource('saving-cash-reports', App\Http\Controllers\Admin\SavingCashReportController::class);
+    Route::get('sharing-prosentase', [App\Http\Controllers\Admin\SharingProsentaseController::class, 'index'])->name('sharing-prosentase.index');
+    Route::get('sharing-prosentase/filter', [App\Http\Controllers\Admin\SharingProsentaseController::class, 'filter'])->name('sharing-prosentase.filter');
 
     // Export Import
     Route::get('export-penarikan-simpanan', [App\Http\Controllers\Admin\ExportImportController::class, 'exportPenarikanSimpanan'])->name('export-penarikan-simpanan');

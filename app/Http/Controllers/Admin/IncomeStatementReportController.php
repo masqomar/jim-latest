@@ -18,7 +18,7 @@ class IncomeStatementReportController extends Controller
         $estimasiPendapatan = $tagihan - $totalPinjaman;
 
         $totalAngsuran = DB::table('loan_details')
-        ->leftJoin("loans", 'loans.id', 'loan_details.pinjam_id')
+        ->leftJoin('loans', 'loans.id', 'loan_details.pinjam_id')
         ->sum('jumlah_bayar');
 
         $pendapatanPinjaman = $totalAngsuran - $totalPinjaman;
@@ -58,8 +58,8 @@ class IncomeStatementReportController extends Controller
         $estimasiPendapatan = $tagihan - $totalPinjaman;
 
         $totalAngsuran = DB::table('loan_details')
-        ->leftJoin("loans", 'loans.id', 'loan_details.pinjam_id')
-        ->whereBetween('loan_details.tgl_bayar', [$request->dari_tanggal, $request->sampai_tanggal])
+        ->leftJoin("loans", 'loans.id', 'loan_details.pinjam_id')        
+        ->whereBetween('loans.tgl_pinjam', [$request->dari_tanggal, $request->sampai_tanggal])
         ->sum('jumlah_bayar');
 
         $pendapatanPinjaman = $totalAngsuran - $totalPinjaman;

@@ -19,7 +19,7 @@
                 <div class="col-md-12">
                     @if ($user->avatar == null)
                     <x-adminlte-profile-widget class="elevation-4" name="{{ $user->first_name }}" desc="{{ $user->member_id }}" img="https://www.gravatar.com/avatar/{{ md5(strtolower(trim($user->email))) }}&s=500" cover="https://picsum.photos/id/541/550/200" header-class="text-white text-right" footer-class='bg-gradient-dark'>
-                        <x-adminlte-profile-row-item title="{{ $user->getRoleNames()->toArray() !== [] ? $user->getRoleNames()[0] : '-' }}" class="text-center border-bottom border-secondary" />
+                        <x-adminlte-profile-row-item title="{{ $user->getRoleNames()->toArray() !== [] ? $user->getRoleNames()[0] : '-' }} - {{$user->date}}" class="text-center border-bottom border-secondary" />
                         <x-adminlte-profile-col-item title="Setoran" text="{{number_format($totalSetoran)}}" icon="fas fa-2x fa-arrow-down text-orange" size=3 />
                         <x-adminlte-profile-col-item title="Penarikan" text="{{number_format($totalPenarikan)}}" icon="fas fa-2x fa-arrow-up text-orange" size=3 />
                         <x-adminlte-profile-col-item title="Saldo" text="{{number_format($saldoSimpanan)}}" icon="fas fa-2x fa-wallet text-orange" size=3 />
@@ -27,7 +27,7 @@
                     </x-adminlte-profile-widget>
                     @else
                     <x-adminlte-profile-widget class="elevation-4" name="{{ $user->first_name }}" desc="{{ $user->member_id }}" img="{{ asset('uploads/images/avatars/$user->avatar') }}" cover="https://picsum.photos/id/541/550/200" header-class="text-white text-right" footer-class='bg-gradient-dark'>
-                        <x-adminlte-profile-row-item title="{{ $user->getRoleNames()->toArray() !== [] ? $user->getRoleNames()[0] : '-' }}" class="text-center border-bottom border-secondary" />
+                        <x-adminlte-profile-row-item title="{{ $user->getRoleNames()->toArray() !== [] ? $user->getRoleNames()[0] : '-' }} - {{$user->date}}" class="text-center border-bottom border-secondary" />
                         <x-adminlte-profile-col-item title="Setoran" text="{{number_format($totalSetoran)}}" icon="fas fa-2x fa-arrow-down text-orange" size=3 />
                         <x-adminlte-profile-col-item title="Penarikan" text="{{number_format($totalPenarikan)}}" icon="fas fa-2x fa-arrow-up text-orange" size=3 />
                         <x-adminlte-profile-col-item title="Saldo" text="{{number_format($saldoSimpanan)}}" icon="fas fa-2x fa-wallet text-orange" size=3 />

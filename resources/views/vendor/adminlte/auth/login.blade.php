@@ -67,7 +67,7 @@
             <div class="row">
                 <div class="col-6">
                     <div class="icheck-primary">
-                        <input type="checkbox" id="remember" name="remember">
+                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                         <label for="remember">
                             {{ __('Remember Me') }}
                         </label>
