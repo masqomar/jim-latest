@@ -51,6 +51,7 @@
     <script src="{{ asset ('assets') }}/js/plugins/jquery-circle-progress/circle-progress.min.js"></script>
     <!-- Base Js File -->
     <script src="{{ asset ('assets') }}/js/base.js"></script>
+    @yield('js')
 </body>
 
 </html>

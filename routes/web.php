@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     if (Auth::check()) {
-        if (Auth::user()->type == 'user' || Auth::user()->type == 'store')
-        return Redirect::to('/home');
-        else {
+        if (Auth::user()->type == 'user') {
+            return Redirect::to('/home');
+        }elseif (Auth::user()->type == 'store') {
+            return Redirect::to('/mitraHome');
+        }else {
             return Redirect::to('/adminHome');
         }
     } else {
@@ -47,7 +49,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::resource('merchant-transactions', App\Http\Controllers\Admin\MerchantTransactionController::class); // Data Penarikan Simpanan
     Route::resource('user-topups', App\Http\Controllers\Admin\TopupController::class); // Data Topup Cash / Transfer
     Route::resource('jimpay-vouchers', App\Http\Controllers\Admin\JimpayVoucherController::class);  // Data Voucher JIMPay
-    
+
     // Laporan - laporan
     Route::get('user-transactions', [App\Http\Controllers\Admin\UserTransactionController::class, 'index'])->name('user-transactions.index');
     Route::get('user-transactions/cetak_pdf', [App\Http\Controllers\Admin\UserTransactionController::class, 'cetak_pdf'])->name('user-transactions.cetak_pdf');
@@ -122,9 +124,9 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
     Route::get('simpanan-sukarela/pencairan', [SimSukarelaController::class, 'tarik'])->name('user.sim-sukarela.tarik');
     // Route::post('simpanan-sukarela/pencairan', [App\Http\Controllers\User\SimSukarelaController::class, 'tarikStore'])->name('user.sim-sukarela.tarikStore');
 
-     // Pembiayaan
-     Route::get('pembiayaan', [\App\Http\Controllers\User\PembiayaanController::class, 'index'])->name('user.pembiayaan.index');
-     Route::get('pembiayaan/{id}/show', [\App\Http\Controllers\User\PembiayaanController::class, 'show'])->name('user.pembiayaan.show');
+    // Pembiayaan
+    Route::get('pembiayaan', [\App\Http\Controllers\User\PembiayaanController::class, 'index'])->name('user.pembiayaan.index');
+    Route::get('pembiayaan/{id}/show', [\App\Http\Controllers\User\PembiayaanController::class, 'show'])->name('user.pembiayaan.show');
 
     // Riwayat Transaksi
     Route::get('riwayat-transaksi', [App\Http\Controllers\User\RiwayatTransaksiController::class, 'index'])->name('user.riwayat-transaksi.index');
@@ -135,4 +137,11 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
     Route::put('edit-profil/update', [App\Http\Controllers\User\ProfilController::class, 'update'])->name('user.profil.update');
     Route::get('update-password', [App\Http\Controllers\User\ProfilController::class, 'updatePassword'])->name('user.profil.update-password');
     Route::post('update-password', [App\Http\Controllers\User\ProfilController::class, 'changePasswordSave'])->name('user.profil.changePasswordSave');
+});
+
+
+// Route Mitra
+Route::middleware(['auth', 'user-access:store'])->group(function () {
+    Route::get('mitraHome', [App\Http\Controllers\HomeController::class, 'mitraHome'])->name('mitraHome');
+    Route::get('mitra/riwayat-transaksi', [App\Http\Controllers\Mitra\RiwayatTransaksiController::class, 'index'])->name('mitra.riwayat-transaksi.index');
 });

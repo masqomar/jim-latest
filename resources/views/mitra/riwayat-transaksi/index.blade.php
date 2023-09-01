@@ -53,7 +53,7 @@
         $('#data-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('user.riwayat-transaksi.index') }}",
+            ajax: "{{ route('mitra.riwayat-transaksi.index') }}",
             columns: [
                 {
                     data: 'created_at',

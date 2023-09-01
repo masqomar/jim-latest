@@ -66,7 +66,14 @@ class HomeController extends Controller
     }
 
     public function mitraHome()
-    {
-        return view('mitraHome');
+    { 
+        $users = User::where('id', Auth::user()->id)->first();
+        $saldo = $users->balance;
+
+        $histories = Transaction::where('payable_id', Auth::user()->id)->orderBy('id', 'DESC')->paginate(3);
+        $totalHistoryIn = Transaction::where('payable_id', Auth::user()->id)->where('type', 'deposit')->sum('amount');
+        $totalHistoryOut = Transaction::where('payable_id', Auth::user()->id)->where('type', 'withdraw')->sum('amount');
+
+        return view('mitraHome', compact('saldo', 'histories', 'totalHistoryIn', 'totalHistoryOut'));
     }
 }

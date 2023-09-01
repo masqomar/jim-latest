@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Mitra;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
@@ -23,7 +23,6 @@ class RiwayatTransaksiController extends Controller
             })->toJson();
         }
 
-        return view('user.riwayat-transaksi.index');
+        return view('mitra.riwayat-transaksi.index');
     }
-
 }
