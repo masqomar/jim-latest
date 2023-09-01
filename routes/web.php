@@ -58,7 +58,6 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::get('balance-sheet-reports/cetak_pdf', [App\Http\Controllers\Admin\BalanceSheetReportController::class, 'cetak_pdf'])->name('balance-sheet-reports.cetak_pdf');
     Route::get('income-statement-reports', [App\Http\Controllers\Admin\IncomeStatementReportController::class, 'index']);
     Route::get('income-statement-reports/filter', [App\Http\Controllers\Admin\IncomeStatementReportController::class, 'filter'])->name('income-statement-reports.filter');
-    Route::resource('deviden-reports', App\Http\Controllers\Admin\DevidenReportController::class);
     Route::resource('cash-transaction-reports', App\Http\Controllers\Admin\CashTransactionReportController::class);
     Route::resource('saving-cash-reports', App\Http\Controllers\Admin\SavingCashReportController::class);
     Route::get('sharing-prosentase', [App\Http\Controllers\Admin\SharingProsentaseController::class, 'index'])->name('sharing-prosentase.index');

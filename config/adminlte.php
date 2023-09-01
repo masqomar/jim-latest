@@ -421,7 +421,7 @@ return [
                 ],
                 [
                     'text' => 'Pembagian SHU',
-                    'url'  => 'deviden-reports',
+                    'url'  => 'sharing-prosentase',
                     'icon_color' => 'yellow',
                 ],
             ]
