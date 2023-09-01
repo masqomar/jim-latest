@@ -83,7 +83,8 @@ class SharingProsentaseController extends Controller
                 $anggota->id,
                 $anggota->member_id . '<br>' . $anggota->first_name,
                 'SiPoJib: ' . number_format($siPoJib) . ' / ' . number_format(round($shuSiPoJibdibagi)) . '<br>' .
-                    'SiSuka: ' . number_format(round($setoranSiSuka - $penarikanSiSuka)) . ' / ' . number_format(round($shuSisukadibagi)),
+                'SiSuka: ' . number_format(round($setoranSiSuka - $penarikanSiSuka)) . ' / ' . number_format(round($shuSisukadibagi)). '<br>' .
+                'Total SHU Simpapan: ' . number_format($shuSiPoJibdibagi + $shuSisukadibagi),
                 number_format($pinjamanAnggota) . ' / ' . number_format(round($shuPinjamanAnggota)), // Pembiayaan
                 number_format(abs($transaksiJimpayAnggota)) . ' / ' . number_format(round($shuTransaksiJimpay)), // JImpay
                 number_format($shuSiPoJibdibagi + $shuSisukadibagi + $shuPinjamanAnggota + $shuTransaksiJimpay), // SHU dibagikan
