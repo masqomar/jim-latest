@@ -3,37 +3,64 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Loan;
 use App\Models\User;
+use App\Models\ViewPinjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use PDF;
 
 class UserTransactionController extends Controller
 {
     public function index()
     {
-        $dataAnggota = User::where('type', 'user')->paginate(10);
-        $angsuran = DB::table('loans')
-            ->leftJoin('loan_details', 'loan_details.pinjam_id', 'loans.id')
-            ->leftJoin('users', 'users.id', 'loans.anggota_id')
-            ->select(DB::raw("SUM(jumlah_bayar) as dibayar"), 'loans.anggota_id')
-            ->groupBy('loans.anggota_id')
-            ->get();
+        $users = User::where('type', 'user')->get();
 
-            return view('user-transactions.index', compact('dataAnggota', 'angsuran'));
-    }
+        foreach ($users as $anggota) {
+            $setoran_sim_pokok = DB::table('saving_transactions')->where('anggota_id', $anggota->id)->where('jenis_id', 40)->where('akun', 'setoran')->sum('jumlah');
+            $penarikan_sim_pokok = DB::table('saving_transactions')->where('anggota_id', $anggota->id)->where('jenis_id', 40)->where('akun', 'Penarikan')->sum('jumlah');
+            $saldoSimPokok = $setoran_sim_pokok - $penarikan_sim_pokok;
 
-    public function cetak_pdf()
-    {
-        $dataAnggota = User::where('type', 'user')->paginate(10);
-        $angsuran = DB::table('loans')
-            ->leftJoin('loan_details', 'loan_details.pinjam_id', 'loans.id')
-            ->leftJoin('users', 'users.id', 'loans.anggota_id')
-            ->select(DB::raw("SUM(jumlah_bayar) as dibayar"), 'loans.anggota_id')
-            ->groupBy('loans.anggota_id')
-            ->get();
+            $setoran_sim_wajib = DB::table('saving_transactions')->where('anggota_id', $anggota->id)->where('jenis_id', 41)->where('akun', 'setoran')->sum('jumlah');
+            $penarikan_sim_wajib = DB::table('saving_transactions')->where('anggota_id', $anggota->id)->where('jenis_id', 41)->where('akun', 'Penarikan')->sum('jumlah');
+            $saldoSimWajib = $setoran_sim_wajib - $penarikan_sim_wajib;
 
-            $pdf = PDF::loadview('user-transactions.cetak_pdf',compact('dataAnggota', 'angsuran'))->setPaper('A4', 'landscape');
-            return $pdf->stream();
+            $setoran_sim_sukarela = DB::table('saving_transactions')->where('anggota_id', $anggota->id)->where('jenis_id', 32)->where('akun', 'setoran')->sum('jumlah');
+            $penarikan_sim_sukarela = DB::table('saving_transactions')->where('anggota_id', $anggota->id)->where('jenis_id', 32)->where('akun', 'Penarikan')->sum('jumlah');
+            $saldoSimSukarela = $setoran_sim_sukarela - $penarikan_sim_sukarela;
+            $totalSaldoSimpanan = $saldoSimPokok + $saldoSimWajib + $saldoSimSukarela;
+
+            $pinjaman = Loan::where('anggota_id', $anggota->id)->where('lunas', 'Belum')->sum('jumlah') + Loan::where('anggota_id', $anggota->id)->where('lunas', 'Belum')->sum('biaya_adm') * 6;
+            $tagihan = ViewPinjaman::where('anggota_id', $anggota->id)->where('lunas', 'Belum')->sum('biaya_adm') * 6 + ViewPinjaman::where('anggota_id', $anggota->id)->where('lunas', 'Belum')->sum('pokok_angsuran') * 6;
+
+            $jumlahPinjaman = Loan::where('anggota_id', $anggota->id)->count();
+            $pinjamanLunas = Loan::where('anggota_id', $anggota->id)->where('lunas', 'Lunas')->count();
+
+            $dataTransaksi[] = [
+                $anggota->id,
+
+                'ID Anggota : ' . ' ' . $anggota->member_id . '<br>' .
+                    'Nama Anggota : ' . ' ' . $anggota->first_name . '<br>' .
+                    'Email : ' . ' ' . $anggota->email . '<br>' .
+                    'Telepon : ' . ' ' . $anggota->mobile,
+
+                'Simpanan Pokok : ' . ' ' . number_format($saldoSimPokok) . '<br>' .
+                    'Simpanan Wajib : ' . ' ' . number_format($saldoSimWajib) . '<br>' .
+                    'Simpanan Sukarela : ' . ' ' . number_format($saldoSimSukarela) . '<br>' .
+                    'Total Simpanan : ' . ' ' . number_format($totalSaldoSimpanan),
+
+                'Total Pinjaman : ' . ' ' . number_format($pinjaman) . '<br>' .
+                    'Total Tagihan : ' . ' ' . number_format($tagihan) . '<br>' .
+                    'Jumlah Pinjaman : ' . ' ' . $jumlahPinjaman . '<br>' .
+                    'Pinjaman Lunas : ' . ' ' . $pinjamanLunas,
+            ];
+        }
+
+        $config = [
+            'data' => $dataTransaksi ?? [null, null, null, null],
+            'order' => [[0, 'asc']],
+            'columns' => [null, null, null, null],
+        ];
+
+        return view('user-transactions.index', compact('config'));
     }
 }

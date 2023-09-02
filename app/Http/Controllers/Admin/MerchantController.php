@@ -94,9 +94,24 @@ class MerchantController extends Controller
         $merchant->load('roles:id,name');
         $saldo = Transaction::where('payable_id', $merchant->id)->where('type', 'deposit')->sum('amount');
         $pencairan = Transaction::where('payable_id', $merchant->id)->where('type', 'withdraw')->sum('amount');
-        $semuaTransaksi = Transaction::where('payable_id', $merchant->id)->latest()->paginate(10);
+        $semuaTransaksi = Transaction::where('payable_id', $merchant->id)->get();
+
+        foreach ($semuaTransaksi as $transaksi) {
+            $transaksiMerchant [] = [
+                $transaksi->id,
+                $transaksi->created_at->format('d-m-Y'),
+                number_format($transaksi->amount),
+                $transaksi->meta,
+            ];
+        }
+
+        $config = [
+            'data' => $transaksiMerchant ?? [null, null, null, null],
+            'order' => [[1, 'asc']],
+            'columns' => [null, null, null, null],
+        ];
         
-        return view('merchants.show', compact('merchant', 'saldo', 'pencairan', 'semuaTransaksi'));
+        return view('merchants.show', compact('merchant', 'saldo', 'pencairan', 'config'));
     }
 
     public function edit(User $merchant)

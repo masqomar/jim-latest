@@ -225,7 +225,7 @@
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="kas-id">{{ __('Untuk Kas') }}</label>
+                                                                <label for="kas-id">{{ __('Dari Kas') }}</label>
                                                                 <select class="form-control @error('kas_id') is-invalid @enderror" name="kas_id" id="kas-id" required>
                                                                     <option value="" selected disabled>-- {{ __('Pilih Kas') }} --</option>
 

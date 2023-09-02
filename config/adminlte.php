@@ -386,7 +386,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Kas Anggota',
-                    'url'  => 'user-saving-reports',
+                    'url'  => 'user-transactions',
                     'icon_color' => 'green',
                 ],
                 [

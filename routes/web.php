@@ -54,7 +54,6 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
     // Laporan - laporan
     Route::get('user-transactions', [App\Http\Controllers\Admin\UserTransactionController::class, 'index'])->name('user-transactions.index');
-    Route::get('user-transactions/cetak_pdf', [App\Http\Controllers\Admin\UserTransactionController::class, 'cetak_pdf'])->name('user-transactions.cetak_pdf');
     Route::get('user-saving-transactions', [App\Http\Controllers\Admin\UserSavingTransactionController::class, 'index'])->name('user-saving-transactions.index');
     Route::get('jimpay-transactions', [App\Http\Controllers\Admin\JimpayTransactionController::class, 'index'])->name('jimpay-transactions.index');
     Route::get('balance-sheet-reports', [App\Http\Controllers\Admin\BalanceSheetReportController::class, 'index']);
