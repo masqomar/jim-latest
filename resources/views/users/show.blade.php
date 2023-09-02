@@ -14,6 +14,11 @@
 
 <section class="content">
     <div class="container-fluid">
+        @if (session('success'))
+        <x-adminlte-alert theme="success" title="Success">
+            {{session('success')}}
+        </x-adminlte-alert>
+        @endif
         <div class="row">
             <div class="col-md-4">
                 <div class="col-md-12">
@@ -35,30 +40,6 @@
                     </x-adminlte-profile-widget>
                     @endif
                 </div>
-                <form action="{{ route('users.storeTopup') }}" method="POST">
-                    @csrf
-                    @method('POST')
-                    <x-adminlte-input name="user_id" type="hidden" value="{{$user->id}}" required>
-                       
-                    </x-adminlte-input>
-                    <x-adminlte-input name="amount" label="Nominal" type="number" placeholder="Nominal" label-class="text-lightblue">
-                        <x-slot name="prependSlot">
-                            <div class="input-group-text">
-                                <i class="far fa-money-bill-alt text-lightblue"></i>
-                            </div>
-                        </x-slot>
-                    </x-adminlte-input>
-                    <x-adminlte-select name="note" label="Keterangan" label-class="text-lightblue">
-                        <x-slot name="prependSlot">
-                            <div class="input-group-text">
-                                <i class="fas fa-lg fa-file-alt text-lightblue"></i>
-                            </div>
-                        </x-slot>
-                        <option value="Topup Cash">Topup Cash</option>
-                        <option value="Voucher Bulanan">Voucher Bulanan</option>
-                    </x-adminlte-select>
-                    <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
-                </form>
             </div>
             <div class="col-md-8">
                 <div class="row">
@@ -85,6 +66,93 @@
                                     <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
                                         <div class="card">
                                             <div class="card-body">
+                                                <h5 class="text-center">Setoran Simpanan</h5>
+                                                <form action="{{ route('users.storeSimpanan') }}" method="POST">
+                                                    @csrf
+                                                    @method('POST')
+
+                                                    <x-adminlte-input name="anggota_id" type="hidden" value="{{$user->id}}" required></x-adminlte-input>
+
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="tgl-transaksi">{{ __('Tgl Transaksi') }}</label>
+                                                                <input type="datetime-local" name="tgl_transaksi" id="tgl-transaksi" class="form-control @error('tgl_transaksi') is-invalid @enderror" value="{{now()}}" placeholder="{{ __('Tgl Transaksi') }}" required />
+                                                                @error('tgl_transaksi')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="jenis-id">{{ __('Jenis Simpanan') }}</label>
+                                                                <select class="form-control @error('jenis_id') is-invalid @enderror" name="jenis_id" id="jenis-id" required>
+                                                                    <option value="" selected disabled>-- {{ __('Pilih Jenis Simpanan') }} --</option>
+
+                                                                    @foreach ($savingTypes as $savingType)
+                                                                    <option value="{{ $savingType->id }}" {{ isset($deposit) && $deposit->jenis_id == $savingType->id ? 'selected' : (old('jenis_id') == $savingType->id ? 'selected' : '') }}>
+                                                                        {{ $savingType->jns_simpan }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('jenis_id')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="jumlah">{{ __('Jumlah') }}</label>
+                                                                <input type="number" name="jumlah" id="jumlah" class="form-control @error('jumlah') is-invalid @enderror" placeholder="{{ __('Jumlah') }}" required />
+                                                                @error('jumlah')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="keterangan">{{ __('Keterangan') }}</label>
+                                                                <input type="text" name="keterangan" id="keterangan" class="form-control @error('keterangan') is-invalid @enderror" placeholder="{{ __('Keterangan') }}" />
+                                                                @error('keterangan')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="kas-id">{{ __('Untuk Kas') }}</label>
+                                                                <select class="form-control @error('kas_id') is-invalid @enderror" name="kas_id" id="kas-id" required>
+                                                                    <option value="" selected disabled>-- {{ __('Pilih Kas') }} --</option>
+
+                                                                    @foreach ($cashTypes as $cashType)
+                                                                    <option value="{{ $cashType->id }}" {{ isset($deposit) && $deposit->kas_id == $cashType->id ? 'selected' : (old('kas_id') == $cashType->id ? 'selected' : '') }}>
+                                                                        {{ $cashType->nama }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('kas_id')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-body">
                                                 @php
                                                 $heads = ['Kode Transaksi','Tanggal Transaksi','Jenis Simpanan','Jumlah','Keterangan'];
                                                 @endphp
@@ -93,6 +161,93 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="text-center">Penarikan Simpanan</h5>
+                                                <form action="{{ route('users.storePenarikan') }}" method="POST">
+                                                    @csrf
+                                                    @method('POST')
+
+                                                    <x-adminlte-input name="anggota_id" type="hidden" value="{{$user->id}}" required></x-adminlte-input>
+
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="tgl-transaksi">{{ __('Tgl Transaksi') }}</label>
+                                                                <input type="datetime-local" name="tgl_transaksi" id="tgl-transaksi" class="form-control @error('tgl_transaksi') is-invalid @enderror" value="{{now()}}" placeholder="{{ __('Tgl Transaksi') }}" required />
+                                                                @error('tgl_transaksi')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="jenis-id">{{ __('Jenis Simpanan') }}</label>
+                                                                <select class="form-control @error('jenis_id') is-invalid @enderror" name="jenis_id" id="jenis-id" required>
+                                                                    <option value="" selected disabled>-- {{ __('Pilih Jenis Simpanan') }} --</option>
+
+                                                                    @foreach ($savingTypes as $savingType)
+                                                                    <option value="{{ $savingType->id }}" {{ isset($deposit) && $deposit->jenis_id == $savingType->id ? 'selected' : (old('jenis_id') == $savingType->id ? 'selected' : '') }}>
+                                                                        {{ $savingType->jns_simpan }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('jenis_id')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="jumlah">{{ __('Jumlah') }}</label>
+                                                                <input type="number" name="jumlah" id="jumlah" class="form-control @error('jumlah') is-invalid @enderror" placeholder="{{ __('Jumlah') }}" required />
+                                                                @error('jumlah')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="keterangan">{{ __('Keterangan') }}</label>
+                                                                <input type="text" name="keterangan" id="keterangan" class="form-control @error('keterangan') is-invalid @enderror" placeholder="{{ __('Keterangan') }}" />
+                                                                @error('keterangan')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label for="kas-id">{{ __('Untuk Kas') }}</label>
+                                                                <select class="form-control @error('kas_id') is-invalid @enderror" name="kas_id" id="kas-id" required>
+                                                                    <option value="" selected disabled>-- {{ __('Pilih Kas') }} --</option>
+
+                                                                    @foreach ($cashTypes as $cashType)
+                                                                    <option value="{{ $cashType->id }}" {{ isset($deposit) && $deposit->kas_id == $cashType->id ? 'selected' : (old('kas_id') == $cashType->id ? 'selected' : '') }}>
+                                                                        {{ $cashType->nama }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('kas_id')
+                                                                <span class="text-danger">
+                                                                    {{ $message }}
+                                                                </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                         <div class="card">
                                             <div class="card-body">
                                                 @php
@@ -109,6 +264,35 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="custom-tabs-one-messages" role="tabpanel" aria-labelledby="custom-tabs-one-messages-tab">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="text-center">Topup JIMPay</h5>
+                                                <form action="{{ route('users.storeTopup') }}" method="POST">
+                                                    @csrf
+                                                    @method('POST')
+                                                    <x-adminlte-input name="user_id" type="hidden" value="{{$user->id}}" required>
+
+                                                    </x-adminlte-input>
+                                                    <x-adminlte-input name="amount" label="Nominal" type="number" placeholder="Nominal" label-class="text-lightblue">
+                                                        <x-slot name="prependSlot">
+                                                            <div class="input-group-text">
+                                                                <i class="far fa-money-bill-alt text-lightblue"></i>
+                                                            </div>
+                                                        </x-slot>
+                                                    </x-adminlte-input>
+                                                    <x-adminlte-select name="note" label="Keterangan" label-class="text-lightblue">
+                                                        <x-slot name="prependSlot">
+                                                            <div class="input-group-text">
+                                                                <i class="fas fa-lg fa-file-alt text-lightblue"></i>
+                                                            </div>
+                                                        </x-slot>
+                                                        <option value="Topup Cash">Topup Cash</option>
+                                                        <option value="Voucher Bulanan">Voucher Bulanan</option>
+                                                    </x-adminlte-select>
+                                                    <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                         <div class="card">
                                             <div class="card-body">
                                                 @php

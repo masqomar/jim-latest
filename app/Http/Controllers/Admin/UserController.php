@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\DepositRequest;
 use App\Http\Requests\JimpayVoucherRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\WithdrawRequest;
+use App\Models\CashType;
 use App\Models\Loan;
 use App\Models\LoanDetail;
 use App\Models\SavingTransaction;
+use App\Models\SavingType;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserTopup;
@@ -125,7 +129,8 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user->load('roles:id,name');
-
+        $savingTypes = SavingType::get();
+        $cashTypes = CashType::where('aktif', 'Y')->where('tmpl_simpan', 'Y')->get();
         $setoranSimpanan = SavingTransaction::with('saving_type')->where('akun', 'Setoran')->where('anggota_id', $user->id)->get();
         $totalSetoran = SavingTransaction::with('saving_type')->where('akun', 'Setoran')->where('anggota_id', $user->id)->sum('jumlah');
         $setoranPenarikan = SavingTransaction::with('saving_type')->where('akun', 'Penarikan')->where('anggota_id', $user->id)->get();
@@ -136,7 +141,7 @@ class UserController extends Controller
         $transaksiJimpay = Transaction::where('payable_id', $user->id)->where('type', 'withdraw')->get();
         $saldoJimpay = $user->balance;
 
-        foreach ($setoranSimpanan as $setoran) {
+        foreach ($setoranSimpanan as $setoran) {           
             $dataSetoran[] = [
                 'TRD' . str_pad($setoran->id, 5, '0', STR_PAD_LEFT),
                 $setoran->tgl_transaksi->format('j F Y'),
@@ -170,29 +175,30 @@ class UserController extends Controller
                 $transaksi->meta ?? '-',
             ];
         }
+
         $configSetoran = [
-            'data' => $dataSetoran ?? [null, null,null, null],
+            'data' => $dataSetoran ?? [null, null, null, null, null],
             'order' => [[0, 'desc']],
             'columns' => [null, null, null, null, null]
         ];
         $configPenarikan = [
-            'data' => $dataPenarikan ?? [null, null,null, null],
+            'data' => $dataPenarikan ?? [null, null, null, null],
             'order' => [[0, 'desc']],
             'columns' => [null, null, null, null, null]
         ];
         $configTopup = [
-            'data' => $dataTopup ?? [null, null,null, null],
+            'data' => $dataTopup ?? [null, null, null, null],
             'order' => [[0, 'desc']],
             'columns' => [null, null, null, null]
         ];
         $configTransaksi = [
-            'data' => $dataTransaksi ?? [null, null,null, null],
+            'data' => $dataTransaksi ?? [null, null, null, null],
             'order' => [[0, 'desc']],
             'columns' => [null, null, null, null]
         ];
 
         // return json_encode($marginPembiayaan);
-        return view('users.show', compact('user', 'configSetoran', 'configPenarikan', 'configTopup', 'configTransaksi', 'totalSetoran', 'totalPenarikan', 'saldoSimpanan', 'saldoJimpay'));
+        return view('users.show', compact('user', 'savingTypes', 'cashTypes', 'configSetoran', 'configPenarikan', 'configTopup', 'configTransaksi', 'totalSetoran', 'totalPenarikan', 'saldoSimpanan', 'saldoJimpay'));
     }
 
     /**
@@ -298,8 +304,40 @@ class UserController extends Controller
             $user->deposit($request->amount, ['description' => $request->note]);
         });
 
-        return redirect()
-            ->route('users.index')
-            ->with('success', __('Topup berhasil disimpan'));
+        return redirect()->back()->with('success', __('Topup berhasil disimpan'));
+    }
+
+    public function storeSimpanan(DepositRequest $request)
+    {
+        $request->validated();
+        SavingTransaction::create([
+            'anggota_id' => $request->anggota_id,
+            'tgl_transaksi'    => $request->tgl_transaksi,
+            'jumlah'    => $request->jumlah,
+            'keterangan'    => $request->keterangan,
+            'kas_id'    => $request->kas_id,
+            'jenis_id'    => $request->jenis_id,
+            'akun' => 'Setoran',
+            'dk' => 'D',
+        ]);
+
+        return redirect()->back()->with('success', __('Setoran simpanan berhasil disimpan'));
+    }
+
+    public function storePenarikan(WithdrawRequest $request)
+    {
+        $request->validated();
+        SavingTransaction::create([
+            'anggota_id' => $request->anggota_id,
+            'tgl_transaksi'    => $request->tgl_transaksi,
+            'jumlah'    => $request->jumlah,
+            'keterangan'    => $request->keterangan,
+            'kas_id'    => $request->kas_id,
+            'jenis_id'    => $request->jenis_id,
+            'akun' => 'Penarikan',
+            'dk' => 'K',
+        ]);
+
+        return redirect()->back()->with('success', __('Penarikan simpanan berhasil disimpan'));
     }
 }

@@ -28,6 +28,8 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::resource('roles', App\Http\Controllers\Admin\RoleController::class); // Role
     Route::resource('users', App\Http\Controllers\Admin\UserController::class); // Data Anggota
     Route::post('users/storeTopup', [App\Http\Controllers\Admin\UserController::class, 'storeTopup'])->name('users.storeTopup'); // Data Anggota
+    Route::post('users/storeSimpanan', [App\Http\Controllers\Admin\UserController::class, 'storeSimpanan'])->name('users.storeSimpanan'); // Data Anggota
+    Route::post('users/storePenarikan', [App\Http\Controllers\Admin\UserController::class, 'storePenarikan'])->name('users.storePenarikan'); // Data Anggota
     Route::resource('merchants', App\Http\Controllers\Admin\MerchantController::class); // Data Anggota
     Route::resource('user-admins', App\Http\Controllers\Admin\UserAdminController::class); // Data Pengurus
     Route::resource('account-types', App\Http\Controllers\Admin\AccountTypeController::class); // Data Jenis Akun
