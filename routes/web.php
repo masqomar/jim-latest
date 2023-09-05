@@ -1,10 +1,22 @@
 <?php
 
+use App\Models\DigiflazzAccount;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/webhook', [App\Http\Controllers\DigiflazzWebhookController::class, 'index']);
+Route::post('/webhook', function(Request $request) {
+    $secret = DigiflazzAccount::select('secret_key')->first()->secret_key;
+
+    $post_data = file_get_contents('php://input');
+    $signature = hash_hmac('sha1', $post_data, $secret);
+    \Log::info($signature);
+
+    if ($request->header('X-Hub-Signature') == 'sha1='.$signature) {
+        \Log::info(json_decode($request->getContent(), true));
+    }
+});
 
 Route::get('/', function () {
     if (Auth::check()) {
