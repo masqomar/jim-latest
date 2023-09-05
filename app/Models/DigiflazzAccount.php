@@ -5,13 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ViewPinjaman extends Model
+class DigiflazzAccount extends Model
 {
     use HasFactory;
 
-    protected $table = 'v_hitung_pinjaman';
-
-    protected $casts = [
-        'tgl_pinjam' => 'datetime'
-    ];
+    protected $fillable = ['username', 'api_key', 'webhook_id', 'secret_key'];
 }

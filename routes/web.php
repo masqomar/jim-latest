@@ -4,14 +4,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/webhook', [App\Http\Controllers\DigiflazzWebhookController::class, 'index']);
 
 Route::get('/', function () {
     if (Auth::check()) {
         if (Auth::user()->type == 'user') {
             return Redirect::to('/home');
-        }elseif (Auth::user()->type == 'store') {
+        } elseif (Auth::user()->type == 'store') {
             return Redirect::to('/mitraHome');
-        }else {
+        } else {
             return Redirect::to('/adminHome');
         }
     } else {
@@ -86,6 +87,10 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
 
     Route::get('log-activity', [App\Http\Controllers\Admin\LogActivityController::class, 'index'])->name('activities.index');
     Route::get('iframe', [App\Http\Controllers\Admin\IframeController::class, 'index'])->name('iframe.index');
+
+    // PPOB
+    Route::get('pulsa', [App\Http\Controllers\Admin\PulsaController::class, 'index'])->name('pulsa.index');
+    Route::post('pulsa', [App\Http\Controllers\Admin\PulsaController::class, 'store'])->name('pulsa.store');
 });
 
 /*---- All User Routes List----*/
@@ -138,6 +143,11 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
     Route::put('edit-profil/update', [App\Http\Controllers\User\ProfilController::class, 'update'])->name('user.profil.update');
     Route::get('update-password', [App\Http\Controllers\User\ProfilController::class, 'updatePassword'])->name('user.profil.update-password');
     Route::post('update-password', [App\Http\Controllers\User\ProfilController::class, 'changePasswordSave'])->name('user.profil.changePasswordSave');
+
+
+    // PPOB
+    Route::get('pulsa-data', [App\Http\Controllers\User\PpobPulsaController::class, 'index'])->name('user.pulsa-data.index');
+    Route::post('pulsa-data', [App\Http\Controllers\User\PpobPulsaController::class, 'store'])->name('user.pulsa-data.store');
 });
 
 

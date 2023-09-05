@@ -507,6 +507,20 @@ return [
             ]
         ],
 
+        ['header' => 'MENU PPOB'],
+        [
+            'text'    => 'Update Harga',
+            'icon'    => 'fas fa-wave-square',
+            'submenu' => [
+                [
+                    'text' => 'Pulsa & data',
+                    'url'  => 'pulsa',
+                    'icon_color' => 'green',
+                    'can'  => 'topup view',
+                ]
+            ]
+        ],
+
         ['header' => 'MENU LAIN - LAIN'],
         [
             'text'    => 'Data Log',

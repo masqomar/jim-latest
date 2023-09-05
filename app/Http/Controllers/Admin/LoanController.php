@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Loan;
 use App\Http\Requests\{StoreLoanRequest, UpdateLoanRequest};
 use App\Models\KopProduct;
+use App\Models\LoanDetail;
+use App\Models\User;
+use App\Models\ViewPinjaman;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -25,15 +28,36 @@ class LoanController extends Controller
      */
     public function index()
     {
-        $dataPinjaman = DB::table('loans')
-        ->leftJoin('loan_details', 'loan_details.pinjam_id', 'loans.id')
-        ->leftJoin('kop_products', 'kop_products.id', 'loans.barang_id')
-        ->leftJoin('users', 'users.id', 'loans.anggota_id')
-        ->select('loans.id', 'tgl_pinjam', 'anggota_id', 'barang_id', 'lama_angsuran', 'jumlah', 'bunga', 'biaya_adm', 'lunas', 'users.member_id', 'users.first_name', 'users.last_name', 'kop_products.nm_barang', 'kop_products.harga', DB::raw("SUM(jumlah_bayar) as sudah_bayar"), DB::raw("COUNT(angsuran_ke) as sisa_angsuran"))
-        ->groupBy('loans.id', 'tgl_pinjam', 'anggota_id', 'barang_id', 'lama_angsuran', 'jumlah', 'bunga', 'biaya_adm', 'lunas', 'users.member_id', 'users.first_name', 'users.last_name', 'kop_products.nm_barang', 'kop_products.harga')
-        ->paginate(5);
+        
+        $dataPinjaman = ViewPinjaman::get();
+        foreach ($dataPinjaman as $pinjaman) {
+            $pinjamanAnggota[] = [
+                'PJ' . str_pad($pinjaman->id, 5, '0', STR_PAD_LEFT),
+                $pinjaman->tgl_pinjam->format('d-m-Y'),
+                User::select('id', 'member_id', 'first_name')->where('id', $pinjaman->anggota_id)->first()->member_id. '<br>'.
+                User::select('id', 'member_id', 'first_name')->where('id', $pinjaman->anggota_id)->first()->first_name,
+                'Nama Barang : ' . KopProduct::where('id', $pinjaman->barang_id)->first()->nm_barang. '<br>'.
+                'Harga Barang : ' . number_format(KopProduct::where('id', $pinjaman->barang_id)->first()->harga). '<br>'.
+                'Lama Angsuran : ' . $pinjaman->lama_angsuran. '<br>'.
+                'Pokok Angsuran : ' . number_format($pinjaman->pokok_angsuran). '<br>'.
+                'Bunga : ' . $pinjaman->bunga. '<br>'.
+                'Margin : ' . number_format($pinjaman->biaya_adm),
+                'Jumlah Angsuran : ' . number_format($pinjaman->ags_per_bulan). '<br>'.
+                'Total Tagihan : ' . number_format($pinjaman->tagihan). '<br>'.
+                'Sudah Dibayar : '. number_format(LoanDetail::where('pinjam_id', $pinjaman->id)->sum('jumlah_bayar')). '<br>'.
+                'Sisa Angsuran : '. number_format($pinjaman->tagihan - LoanDetail::where('pinjam_id', $pinjaman->id)->sum('jumlah_bayar')). '<br>'.
+                'sisatagihan',
+                $pinjaman->lunas,
+            ] ;
+        }
 
-        return view('loans.index', compact('dataPinjaman'));
+        $config = [
+            'data' => $pinjamanAnggota,
+            'order' => [[0, 'desc']],
+            'columns' => [null, null, null, null, null, null]
+        ];
+
+        return view('loans.index', compact('config'));
     }
 
     /**
