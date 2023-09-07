@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
-Route::match(['get', 'post'], '/webhook', [App\Http\Controllers\DigiflazzWebhookController::class, 'index']);
+Route::post('/webhook', [App\Http\Controllers\DigiflazzWebhookController::class, 'index']);
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -41,7 +41,9 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::resource('kop-products', App\Http\Controllers\Admin\KopProductController::class); // Data Barang Koperasi
     Route::resource('submissions', App\Http\Controllers\Admin\SubmissionController::class); // Data Pengajuan
     Route::resource('loans', App\Http\Controllers\Admin\LoanController::class); // Data Pinjaman
-    Route::resource('loan-payments', App\Http\Controllers\Admin\LoanPaymentController::class); // Data Angsuran
+    Route::get('loan-payments', [App\Http\Controllers\Admin\LoanPaymentController::class, 'index'])->name('loan-payments.index'); // Data Angsuran
+    Route::get('loan-payments/{id}', [App\Http\Controllers\Admin\LoanPaymentController::class, 'show'])->name('loan-payments.show'); // Data Angsuran
+    Route::post('loan-payments', [App\Http\Controllers\Admin\LoanPaymentController::class, 'bayar'])->name('loan-payments.bayar'); // Data Angsuran
     Route::resource('loan-paids', App\Http\Controllers\Admin\LoanPaidController::class); // Data Pinjaman Lunas
     Route::resource('loan-details', App\Http\Controllers\Admin\LoanDetailController::class); // Data Angsuran
     Route::resource('cash-ins', App\Http\Controllers\Admin\CashInController::class); // Data Pemasukan Kas
@@ -66,6 +68,8 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::resource('saving-cash-reports', App\Http\Controllers\Admin\SavingCashReportController::class);
     Route::get('sharing-prosentase', [App\Http\Controllers\Admin\SharingProsentaseController::class, 'index'])->name('sharing-prosentase.index');
     Route::get('sharing-prosentase/filter', [App\Http\Controllers\Admin\SharingProsentaseController::class, 'filter'])->name('sharing-prosentase.filter');
+    Route::get('rat', [App\Http\Controllers\Admin\RapatAkhirTahunController::class, 'index'])->name('rat.index');
+    Route::post('rat/pdf', [App\Http\Controllers\Admin\RapatAkhirTahunController::class, 'generatePDF'])->name('rat.generatePDF');
 
     // Export Import
     Route::get('export-penarikan-simpanan', [App\Http\Controllers\Admin\ExportImportController::class, 'exportPenarikanSimpanan'])->name('export-penarikan-simpanan');

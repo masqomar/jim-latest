@@ -30,6 +30,8 @@ class CashInController extends Controller
             return DataTables::of($cashTransactions)
             ->addColumn('kode_transaksi', function ($row) {
                 return 'TKD' . str_pad($row->id, 5, '0', STR_PAD_LEFT);
+            })->addColumn('tgl_catat', function ($row) {
+                return $row->tgl_catat->format('d-m-Y');
             })->addColumn('jumlah', function ($row) {
                     return number_format($row->jumlah);
                 })->addColumn('action', 'cash-ins.include.action')

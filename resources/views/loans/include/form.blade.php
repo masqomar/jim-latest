@@ -69,7 +69,7 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="jumlah">{{ __('Jumlah') }}</label>
+            <label for="jumlah">{{ __('Harga Barang') }}</label>
             <input type="number" name="jumlah" id="jumlah" class="form-control @error('jumlah') is-invalid @enderror" value="{{ isset($loan) ? $loan->jumlah : old('jumlah') }}" placeholder="{{ __('Jumlah') }}" required />
             @error('jumlah')
                 <span class="text-danger">

@@ -28,27 +28,27 @@ class LoanController extends Controller
      */
     public function index()
     {
-        
+
         $dataPinjaman = ViewPinjaman::get();
         foreach ($dataPinjaman as $pinjaman) {
             $pinjamanAnggota[] = [
                 'PJ' . str_pad($pinjaman->id, 5, '0', STR_PAD_LEFT),
                 $pinjaman->tgl_pinjam->format('d-m-Y'),
-                User::select('id', 'member_id', 'first_name')->where('id', $pinjaman->anggota_id)->first()->member_id. '<br>'.
-                User::select('id', 'member_id', 'first_name')->where('id', $pinjaman->anggota_id)->first()->first_name,
-                'Nama Barang : ' . KopProduct::where('id', $pinjaman->barang_id)->first()->nm_barang. '<br>'.
-                'Harga Barang : ' . number_format(KopProduct::where('id', $pinjaman->barang_id)->first()->harga). '<br>'.
-                'Lama Angsuran : ' . $pinjaman->lama_angsuran. '<br>'.
-                'Pokok Angsuran : ' . number_format($pinjaman->pokok_angsuran). '<br>'.
-                'Bunga : ' . $pinjaman->bunga. '<br>'.
-                'Margin : ' . number_format($pinjaman->biaya_adm),
-                'Jumlah Angsuran : ' . number_format($pinjaman->ags_per_bulan). '<br>'.
-                'Total Tagihan : ' . number_format($pinjaman->tagihan). '<br>'.
-                'Sudah Dibayar : '. number_format(LoanDetail::where('pinjam_id', $pinjaman->id)->sum('jumlah_bayar')). '<br>'.
-                'Sisa Angsuran : '. number_format($pinjaman->tagihan - LoanDetail::where('pinjam_id', $pinjaman->id)->sum('jumlah_bayar')). '<br>'.
-                'sisatagihan',
+                User::select('id', 'member_id', 'first_name')->where('id', $pinjaman->anggota_id)->first()->member_id . '<br>' .
+                    User::select('id', 'member_id', 'first_name')->where('id', $pinjaman->anggota_id)->first()->first_name,
+                'Nama Barang : ' . KopProduct::where('id', $pinjaman->barang_id)->first()->nm_barang . '<br>' .
+                    'Harga Barang : ' . number_format(KopProduct::where('id', $pinjaman->barang_id)->first()->harga) . '<br>' .
+                    'Lama Angsuran : ' . $pinjaman->lama_angsuran . '<br>' .
+                    'Pokok Angsuran : ' . number_format($pinjaman->pokok_angsuran) . '<br>' .
+                    'Bunga : ' . $pinjaman->bunga . '<br>' .
+                    'Margin : ' . number_format($pinjaman->biaya_adm),
+                'Jumlah Angsuran : ' . number_format($pinjaman->ags_per_bulan) . '<br>' .
+                    'Total Tagihan : ' . number_format($pinjaman->tagihan) . '<br>' .
+                    'Sudah Dibayar : ' . number_format(LoanDetail::where('pinjam_id', $pinjaman->id)->sum('jumlah_bayar')) . '<br>' .
+                    'Sisa Angsuran : ' . number_format($pinjaman->tagihan - LoanDetail::where('pinjam_id', $pinjaman->id)->sum('jumlah_bayar')) . '<br>' .
+                    'sisatagihan',
                 $pinjaman->lunas,
-            ] ;
+            ];
         }
 
         $config = [
@@ -78,13 +78,10 @@ class LoanController extends Controller
      */
     public function store(StoreLoanRequest $request)
     {
-        
-        Loan::create($request->validated() + (['lunas' => 'Belum', 'dk' => 'K', 'jns_trans' => 7]));
-
-        // $jmlBarang = KopProduct::select('jml_brg')->where('id', $request->barang_id)->first()->jml_brg;
-        // $kurangi = $jmlBarang - 1;
-        // KopProduct::where('id', $request->barang_id)->update(['jml_brg', $kurangi]);
-        
+        DB::transaction(function () use ($request) {
+            Loan::create($request->validated() + (['lunas' => 'Belum', 'dk' => 'K', 'jns_trans' => 7]));
+            KopProduct::where('id', $request->barang_id)->update(['jml_brg' => 0]);
+        });
         return redirect()
             ->route('loans.index')
             ->with('success', __('Pinjaman baru berhasil disimpan.'));
@@ -98,9 +95,9 @@ class LoanController extends Controller
      */
     public function show(Loan $loan)
     {
-        $loan->load('user:id,first_name', 'kop_product:id,nm_barang', 'cash_type:id,nama', 'cash_type:id,nama', );
+        $loan->load('user:id,first_name', 'kop_product:id,nm_barang', 'cash_type:id,nama', 'cash_type:id,nama',);
 
-		return view('loans.show', compact('loan'));
+        return view('loans.show', compact('loan'));
     }
 
     /**
@@ -111,9 +108,9 @@ class LoanController extends Controller
      */
     public function edit(Loan $loan)
     {
-        $loan->load('user:id,first_name', 'kop_product:id,nm_barang', 'cash_type:id,nama', 'cash_type:id,nama', );
+        $loan->load('user:id,first_name', 'kop_product:id,nm_barang', 'cash_type:id,nama', 'cash_type:id,nama',);
 
-		return view('loans.edit', compact('loan'));
+        return view('loans.edit', compact('loan'));
     }
 
     /**
@@ -125,7 +122,7 @@ class LoanController extends Controller
      */
     public function update(UpdateLoanRequest $request, Loan $loan)
     {
-        
+
         $loan->update($request->validated());
 
         return redirect()
