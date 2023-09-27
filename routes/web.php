@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/webhook', [App\Http\Controllers\DigiflazzWebhookController::class, 'index']);
+// Route::post('/webhook', [App\Http\Controllers\DigiflazzWebhookController::class, 'index']);
 
 Route::get('/', function () {
     if (Auth::check()) {

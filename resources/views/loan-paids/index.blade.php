@@ -43,7 +43,6 @@
                                         <th>{{ __('Total Tagihan') }}</th>
                                         <th>{{ __('Di Bayar') }}</th>
                                         <th>{{ __('Selisih') }}</th>
-                                        <th>{{ __('Action') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,7 +68,6 @@
                                             @else
                                             <td class="bg-primary">Rp. {{number_format($selisih)}}</td>
                                             @endif
-                                            <td>aaa</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
