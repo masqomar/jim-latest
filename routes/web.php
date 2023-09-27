@@ -6,19 +6,20 @@ use Illuminate\Support\Facades\Route;
 
 // Route::post('/webhook', [App\Http\Controllers\DigiflazzWebhookController::class, 'index']);
 
-Route::get('/', function () {
-    if (Auth::check()) {
-        if (Auth::user()->type == 'user') {
-            return Redirect::to('/home');
-        } elseif (Auth::user()->type == 'store') {
-            return Redirect::to('/mitraHome');
-        } else {
-            return Redirect::to('/adminHome');
-        }
-    } else {
-        return Redirect::to('/login');
-    }
-});
+// Route::get('/', function () {
+//     if (Auth::check()) {
+//         if (Auth::user()->type == 'user') {
+//             return Redirect::to('/home');
+//         } elseif (Auth::user()->type == 'store') {
+//             return Redirect::to('/mitraHome');
+//         } else {
+//             return Redirect::to('/adminHome');
+//         }
+//     } else {
+//         return Redirect::to('/login');
+//     }
+// });
+
 
 Auth::routes();
 
